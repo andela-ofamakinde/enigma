@@ -45,6 +45,9 @@ module Enigma
   class Keyencryptor
 
   def cipher(rotation_key)
+    ratation_key = rand.to_s[2..5]
+    key_array = rotation_key.split(" ")
+
     key_array = rotation_key.to_s.chars.map(&:to_i)
     characters = (' '..'z').to_a
     rotated_characters = characters.rotate(rotation)
@@ -52,7 +55,6 @@ module Enigma
   end
 
     def encrypt_letter(letter, rotation)
-      1234.to_s.chars.map(&:to_i)
       cipher_for_rotation = cipher(rotation)    
       cipher_for_rotation[letter]
     end

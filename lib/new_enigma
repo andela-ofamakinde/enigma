@@ -1,0 +1,41 @@
+class Keyencryptor
+    def cipher(rotation)
+    characters = (' '..'z').to_a
+    rotated_characters = characters.rotate(rotation)
+    Hash[characters.zip(rotated_characters)]
+    end
+    
+    @@rotation = rand.to_s[2..6].split("")
+    @@dated =  Time.now.strftime("%d%m%y")
+    @@dated_square = (@@dated.to_i * @@dated.to_i).to_s.split("")
+    @@result = @@dated_square.length - 4
+    @@new_date = @@dated_square.drop(@result)
+    @@arotation = ("#{@@rotation[0]}" + "#{@@rotation[1]}").to_i + (@@new_date[0]).to_i
+    puts "answer" + "#{@@arotation}"
+    
+  @@brotation = ("#{@@rotation[1]}" + "#{@@rotation[2]}").to_i + (@@new_date[1]).to_i
+    
+    @@crotation = ("#{@@rotation[2]}" + "#{@@rotation[3]}").to_i + (@@new_date[2]).to_i
+    
+  @@drotation = ("#{@@rotation[3]}" + "#{@@rotation[4]}").to_i + (@@new_date[3]).to_i
+
+    def encrypt_letter(letter, rotation)
+      cipher_for_rotation = cipher(rotation)    
+      cipher_for_rotation[letter]
+    end
+
+    def encrypt(string)
+      letters = string.split("")
+      puts "#{@@arotation}" +  "answer2"
+      puts cypher_array = [@@arotation, @@brotation, @@crotation, @@drotation]
+      puts rotation_array = Hash[letters.zip(cypher_array)]
+      results = rotation_array.collect do |letter, rotation|
+        encrypted_letter = encrypt_letter(letter, rotation)
+      end
+        results.join
+    end
+  end
+  
+  newkey = Keyencryptor.new
+  newkey.encrypt("hier")
+ 
