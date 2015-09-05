@@ -10,25 +10,19 @@ module Enigma
       Hash[characters.zip(rotated_characters)]
     end
 
-    def break_key(rotation, dated, stringed)
-      @rotation = rotation.split("")
-      
-      @dated_square = (dated.to_i * dated.to_i).to_s.split("")
-
-      @new_date = @dated_square.drop(@dated_square.length - 4)
-
-      @arotation = ("#{@rotation[0]}" + "#{@rotation[1]}").to_i + (@new_date[0]).to_i
-
-      @brotation = ("#{@rotation[1]}" + "#{@rotation[2]}").to_i + (@new_date[1]).to_i
-
-      @crotation = ("#{@rotation[2]}" + "#{@rotation[3]}").to_i + (@new_date[2]).to_i
-
-      @drotation = ("#{@rotation[3]}" + "#{@rotation[4]}").to_i + (@new_date[3]).to_i
-
-      @cypher_array = [@arotation, @brotation, @crotation, @drotation]
-
-      @rotation_array = Hash[stringed.zip(@cypher_array)]
+  def break_key(rotation, dated, stringed)
+    @rotation = rotation.split("")
+    @new_date = (dated.to_i**2).to_s.split("").last(4)
+    @cypher_array = []
+    i = 0
+    while i < 4
+      @cypher_array << ("#{@rotation[i]}" + "#{@rotation[i+1]}").to_i + (@new_date[i]).to_i
+      i+=1
     end
+    @cypher_array 
+    @rotation_array = Hash[stringed.zip(@cypher_array)]
+    puts @rotation_array
+  end
 
     def encrypt_letter(letter, rotated)
       cipher_for_rotation = cipher(rotated)    
@@ -40,7 +34,7 @@ module Enigma
       puts "this is " + "#{rotation}"
       dated = Time.now.strftime("%d%m%y")
       
-      stringed = (string).split("").each_slice(3).to_a      
+      stringed = (string).split("").each_slice(4).to_a      
       result = stringed.collect do |arr|
         break_key(rotation, dated, arr)
         results = @rotation_array.collect do |letter, rotation|
@@ -70,18 +64,16 @@ module Enigma
     
     def break_key(rotation, dated, stringed)
       @rotation = rotation.split("")
-      @dated_square = (dated.to_i * dated.to_i).to_s.split("")
-      @new_date = @dated_square.drop(@dated_square.length - 4)
-      @arotation = ("#{@rotation[0]}" + "#{@rotation[1]}").to_i + (@new_date[0]).to_i
-  
-      @brotation = ("#{@rotation[1]}" + "#{@rotation[2]}").to_i + (@new_date[1]).to_i
-  
-      @crotation = ("#{@rotation[2]}" + "#{@rotation[3]}").to_i + (@new_date[2]).to_i
-  
-      @drotation = ("#{@rotation[3]}" + "#{@rotation[4]}").to_i + (@new_date[3]).to_i
-      @cypher_array = [@arotation, @brotation, @crotation, @drotation]
-      
-      puts @rotation_array = Hash[stringed.zip(@cypher_array)]
+      @new_date = (dated.to_i**2).to_s.split("").last(4)
+      @cypher_array = []
+      i = 0
+      while i < 4
+        @cypher_array << ("#{@rotation[i]}" + "#{@rotation[i+1]}").to_i + (@new_date[i]).to_i
+        i+=1
+      end
+      @cypher_array 
+      @rotation_array = Hash[stringed.zip(@cypher_array)]
+      puts @rotation_array
     end
 
     def decrypt_letter(letter, rotated)
@@ -90,14 +82,14 @@ module Enigma
     end
       
   def decrypt(string, enc_key, enc_date)
-    stringed = (string).split("").each_slice(3).to_a
+    stringed = (string).split("").each_slice(4).to_a
       
-     result = stringed.collect do |arr|
-        break_key(enc_key, enc_date, arr)
-        results = @rotation_array.collect do |letter, rotation|
-            encrypted_letter = decrypt_letter(letter, rotation)
-        end
-        results.join
+    result = stringed.collect do |arr|
+      break_key(enc_key, enc_date, arr)
+      results = @rotation_array.collect do |letter, rotation|
+        encrypted_letter = decrypt_letter(letter, rotation)
+      end
+      results.join
     end
     result.join
   end
