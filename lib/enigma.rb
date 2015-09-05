@@ -20,8 +20,8 @@ module Enigma
       i+=1
     end
     @cypher_array 
-    @rotation_array = Hash[stringed.zip(@cypher_array)]
-    puts @rotation_array
+    @rotation_hash = Hash[@cypher_array.zip(stringed)]
+    puts @rotation_hash
   end
 
     def encrypt_letter(letter, rotated)
@@ -37,8 +37,8 @@ module Enigma
       stringed = (string).split("").each_slice(4).to_a      
       result = stringed.collect do |arr|
         break_key(rotation, dated, arr)
-        results = @rotation_array.collect do |letter, rotation|
-            encrypted_letter = encrypt_letter(letter, rotation)
+        results = @rotation_hash.collect do |letter, rotation|
+            encrypted_letter = encrypt_letter(rotation, letter)
         end
         results.join
       end
@@ -72,8 +72,8 @@ module Enigma
         i+=1
       end
       @cypher_array 
-      @rotation_array = Hash[stringed.zip(@cypher_array)]
-      puts @rotation_array
+      @rotation_hash = Hash[@cypher_array.zip(stringed)]
+      puts @rotation_hash
     end
 
     def decrypt_letter(letter, rotated)
@@ -86,8 +86,8 @@ module Enigma
       
     result = stringed.collect do |arr|
       break_key(enc_key, enc_date, arr)
-      results = @rotation_array.collect do |letter, rotation|
-        encrypted_letter = decrypt_letter(letter, rotation)
+      results = @rotation_hash.collect do |letter, rotation|
+        encrypted_letter = decrypt_letter(rotation, letter)
       end
       results.join
     end
