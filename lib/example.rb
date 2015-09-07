@@ -106,20 +106,8 @@ def break_key(encrypted_array, decrypted_array, date_array)
    
 end
   @result
-  enigma = @result.join.split("").each_slice(2).to_a
-    final_answer = []
-    final_answer << enigma[0][0]
-    final_answer << enigma[1][0]
-    final_answer << enigma[2][0]
-    final_answer << enigma[3][0]
-    final_answer << enigma[3][1]
-    final_answer.join
+  konvert(@result)
  end
- 
- 
-sort_messages("00o6qckw 0aqr0qvru", "060915")
-# @crackkey.decrypt_letter("o",94)
-
 
 def konvert(arr)
     new_array = []
@@ -137,9 +125,11 @@ def konvert(arr)
             return konvert(arr)
         end
     end
-    new_array
+    p new_array
     new_array[0]+new_array[1][1]+new_array[2][1]+new_array[3][1]
 end
 
-konvert(["02", 11, 10, "02"])
+sort_messages("qje0gyaq0j3khjgphd", "070915")
+# @crackkey.decrypt_letter("o",94)
+
 
