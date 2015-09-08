@@ -10,6 +10,7 @@ module Enigma
 
     def decrypt(secret, secret_key, secret_date)
       secret_array = (secret).downcase.split("").each_slice(4).to_a
+      require "pry-nav"; binding.pry
 
       new_rotation = Rotation.new
       rotation_array = new_rotation.rotate_key(secret_key,secret_date)
