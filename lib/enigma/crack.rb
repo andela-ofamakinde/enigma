@@ -8,34 +8,30 @@ module Enigma
   class Crack
 
     def crack_file_messages(secret_file, output_file, date)
-      #read encrypted message from file into variable arr 
-      input_file = File.open(secret_file, "r")
-      secret_message = input_file.read
+      secret_message = File.open(secret_file, "r").read
       arr = secret_message.downcase.split("").each_slice(4).to_a[-1]
       end_array = [".", ".", "e", "n", "d", ".", "."]
       extra_length = secret_message.split("").length - 7
+
       extra_length.times do 
           end_array.unshift("o")
       end
-      if arr.length == 4
-          encrypt_array = arr
-          decrypt_array = end_array.each_slice(4).to_a[-1]
-      else
-          encrypt_array = secret_message.split("").each_slice(4).to_a[-2]
-          decrypt_array = end_array.each_slice(4).to_a[-2]
-      end
+      
+      encrypt_array = arr.length == 4 ? arr : secret_message.split("").each_slice(4).to_a[-2]
+      decrypt_array = arr.length == 4 ? end_array.each_slice(4).to_a[-1] : end_array.each_slice(4).to_a[-2]
       the_date = (date.to_i**2).to_s.split("").last(4).map(&:to_i)
       sort_file_messages(secret_file,output_file, date, encrypt_array, decrypt_array, the_date)
-      # encrypt_key = break_key(encrypt_array, decrypt_array, the_date)
-      # crack_file(secret_file, output_file, encrypt_key, date)
-      # p "Created " + "#{output_file}" + " with the cracked key " + "#{encrypt_key}" + "and date " + "#{date}"
-
     end
 
     def sort_file_messages(secret_file, output_file, date, encrypt_array, decrypt_array, the_date)
       encrypt_key = break_key(encrypt_array, decrypt_array, the_date)
       crack_file(secret_file, output_file, encrypt_key, date)
-      p "Created " + "#{output_file}" + " with the cracked key " + "#{encrypt_key}" + "and date " + "#{date}"
+      p "Created " + "#{output_file}" + " with the cracked key " + "#{encrypt_key}" + " and date " + "#{date}"
+    end
+
+    def crack_file(input_file, output_file, enc_key, enc_date)
+      file_crack = File_Decryptor.new
+      file_crack.decrypt_file(input_file, output_file, enc_key, enc_date)
     end
 
     def break_key(encrypted_array, decrypted_array, date_array)
@@ -80,11 +76,6 @@ module Enigma
           end
         end
         new_array[0]+new_array[1][1]+new_array[2][1]+new_array[3][1]
-    end
-
-    def crack_file(input_file, output_file, enc_key, enc_date)
-      file_crack = File_Decryptor.new
-      file_crack.decrypt_file(input_file, output_file, enc_key, enc_date)
     end
 
   end
