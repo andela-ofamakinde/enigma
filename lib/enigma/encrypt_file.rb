@@ -14,3 +14,8 @@ module Enigma
 
   end
 end
+
+input_file = ARGV[0] || input_file
+output_file = ARGV[1] || output_file
+b = Enigma::File_Encryptor.new
+b.encrypt_file(input_file, output_file) if input_file

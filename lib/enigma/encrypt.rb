@@ -30,4 +30,4 @@ module Enigma
 end
 
 e = Enigma::Encryptor.new
-e.encrypt("hello")
+e.encrypt("hello..end..")

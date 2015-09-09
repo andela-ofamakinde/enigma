@@ -14,3 +14,10 @@ module Enigma
       
   end
 end
+
+input_file = ARGV[0] || input_file
+output_file = ARGV[1] || output_file
+enc_key = ARGV[2] || enc_key
+enc_date = ARGV[3] || enc_date
+f = Enigma::File_Decryptor.new
+f.decrypt_file(input_file, output_file, enc_key, enc_date) if input_file
