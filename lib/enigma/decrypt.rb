@@ -20,7 +20,11 @@ module Enigma
        end
        results.join
       end
-      p result.join
+        message = {
+          text: result.join,
+          key: enc_key,
+          date: enc_date
+       }
     end
 
   end

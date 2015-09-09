@@ -8,8 +8,10 @@ module Enigma
       encrypt_text = Encryptor.new
       puts encrypt_secret = encrypt_text.encrypt(message.read)
       encrypted_message = File.open(output_file, "w")
-      encrypted_message.write(encrypt_secret)
+      encrypted_message.write(encrypt_secret[:text])
       encrypted_message.close
+      
+      p "Created #{output_file} with the key #{encrypt_secret[:key]} and date #{encrypt_secret[:date]}"
     end
 
   end

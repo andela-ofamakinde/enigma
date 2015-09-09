@@ -1,5 +1,4 @@
 require_relative 'cipher'
-require 'pry'
 require_relative 'rotation_key'
 
 module Enigma
@@ -12,7 +11,6 @@ module Enigma
 
     def encrypt(string)
       rotation = rand(10000..99999).to_s
-      puts "this is " + "#{rotation}"
       dated = Time.now.strftime("%d%m%y")
       new_key = Rotation.new
       stringed = (string).downcase.split("").each_slice(4).to_a   
@@ -23,7 +21,11 @@ module Enigma
          end
         results.join
        end
-       p result.join
+       message = {
+        text: result.join,
+        key: rotation,
+        date: dated
+       }
     end
 
   end
