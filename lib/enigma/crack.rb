@@ -1,110 +1,113 @@
-require_relative 'encrypt'
-require_relative 'decrypt'
-require_relative 'cipher'
+require_relative "decrypt"
+require_relative "cipher"
+require_relative "encrypt"
+
 
 module Enigma
   class Crack
-    #   def sort_messages(encrypted_message, date)
-    #   encrypt = encrypted_message.split(//).last(7).join
-    #   p encrypt
-    #   end_array = "..end.."
-    #   # new_date = (date.to_i**2).to_s.split("").last(4).map(&:to_i)
-    #   p date
-    #   break_key(encrypt, end_array, date)
-    # end
+
     def sort_messages(encrypted_message, date)
-        encrypt_array = encrypted_message.split("").each_slice(4).to_a[-2]
-        end_array = [".", ".", "e", "n", "d", ".", "."]
-        extra_length = encrypted_message.split("").length - 7
-        extra_length.times do 
-            end_array.unshift("o")
-        end
-        # puts "#{end_array
-        puts "#{encrypt_array}"
+      # encrypt_array = encrypted_message.downcase.split("").each_slice(4).to_a[-2]
+      # end_array = [".", ".", "e", "n", "d", ".", "."]
+      # extra_length = encrypted_message.split("").length - 7
+      # extra_length.times do 
+      #     end_array.unshift("o")
+      # end
+      # # puts "#{end_array
+      # # puts "#{encrypt_array}"
 
-        decrypt_array = end_array.each_slice(4).to_a[-2]
-        
-          puts "#{decrypt_array}"
-        the_date = (date.to_i**2).to_s.split("").last(4).map(&:to_i)
-        break_key(encrypt_array, decrypt_array, the_date)
+      # decrypt_array = end_array.each_slice(4).to_a[-2]
+      
+      #   # puts "#{decrypt_array}"
+      # the_date = (date.to_i**2).to_s.split("").last(4).map(&:to_i)
+      # p break_key(encrypt_array, decrypt_array, the_date)
+    arr = encrypted_message.downcase.split("").each_slice(4).to_a[-1]
+    # p arr
+    # p arr.length
+    end_array = [".", ".", "e", "n", "d", ".", "."]
+    extra_length = encrypted_message.split("").length - 7
+    extra_length.times do 
+        end_array.unshift("o")
     end
-    # def break_key(encrypted_array, decrypted_array, date)
-    #   # dated = date.join.to_s
-    #   # p dated
-    #   p encrypted_array
-    #   @new_decrypt = Decryptor.new
-    #   # answer = @new_decrypt.decrypt("vfx00fr", "06053", "080915")
-    #   # p answer
-    #   result = []
-    #    (10000..99999).each do |i|
-    #     answer2 = @new_decrypt.decrypt(encrypted_array, i.to_s, date)
-    #     # require "pry-nav"; binding.pry if i == 93351
-    #     if answer2 === decrypted_array then
-    #       result << i
-    #       require "pry-nav"; binding.pry
-    #       break
-    #     end
-    #    end
-    #     result
-    # end
+    if arr.length == 4
+        encrypt_array = arr
+        decrypt_array = end_array.each_slice(4).to_a[-1]
+    else
+        encrypt_array = encrypted_message.split("").each_slice(4).to_a[-2]
+        decrypt_array = end_array.each_slice(4).to_a[-2]
+    end
 
+    # encrypt_array = encrypted_message.split("").each_slice(4).to_a[-2]
+    # puts "#{end_array}"
+    # puts "#{encrypt_array}"
+
+    
+      # puts "#{decrypt_array}"
+    the_date = (date.to_i**2).to_s.split("").last(4).map(&:to_i)
+    p break_key(encrypt_array, decrypt_array, the_date)
+    end
+
+    def cipher(rotation)
+      characters = ('a'..'z').to_a.concat(("0".."9").to_a).push(" ", ".", ",")
+      rotated_characters = characters.rotate(rotation)
+      Hash[characters.zip(rotated_characters)]
+    end
+
+    def decrypt_letter(letter, rotated)
+       cipher_for_rotation = cipher(rotated)    
+       cipher_for_rotation.key(letter)
+    end
 
     def break_key(encrypted_array, decrypted_array, date_array)
-      # require "pry-nav"; binding.pry
       result = []
       j = 0
       k = 0
       l = 0
-      cipher_new = Cipher.new
-      # rotation = i+date_array[k]
-      # cipher_for_rotation = cipher_new.cipher(rotation)
-      new_decrypt = Decryptor.new
       while j < 4
-        i = 0
-          while i < 40
-            rotation = i+date_array[k]
-            cipher_for_rotation = cipher_new.cipher(rotation)
-            # new_cipher = cipher(rotation)
-            decrypted = new_decrypt.decrypt_letter(encrypted_array[j], cipher_for_rotation)
-            if decrypted == decrypted_array[l] then 
-              if i < 10
-                result << "0"+ "#{i}"
-              else
+          i = 0
+      while i < 40
+     if decrypt_letter(encrypted_array[j], i+date_array[k]) == decrypted_array[l] then 
+                if i < 10
+                    result << "0"+ "#{i}"
+                else
                 result << i
-              end
-              p result
-              break
+                end
+                # puts "#{result}"
+            break
             end
-              i+=1
-          end
+        i+=1
+        end
         k+=1
         l+=1
         j+=1
-      end
+       
+    end
       result
-      # convert_key(result)
-    end
+      p result
+      konvert(result)
+     end
 
-    def convert_key(arr)
-      arr = arr.map { |ar| ar.to_s }
-      new_array = []
-      new_array << arr.shift
-      # require "pry-nav"; binding.pry
-      arr.each do |a|
-        if a[0] == new_array[-1][1]
-          new_array << a.to_s
-        elsif (a.to_i+39).to_s[0] == new_array[-1][1]
-          new_array << (a.to_i+39).to_s
-        elsif (a.to_i+78).to_s[0] == new_array[-1][1]
-          new_array << (a.to_i+78).to_s
-        else 
-          arr = arr.unshift(new_array[0].to_i+39)
-        
-           convert_key(arr)
+    def konvert(arr)
+        new_array = []
+        arr = arr.map { |ar| ar.to_s }
+        new_array << arr.shift
+        arr.each do |a|
+            if a[0] == new_array[-1][1]
+                new_array << a.to_s
+            elsif (a.to_i+39).to_s[0] == new_array[-1][1]
+                new_array << (a.to_i+39).to_s
+            elsif (a.to_i+78).to_s[0] == new_array[-1][1]
+                new_array << (a.to_i+78).to_s
+            else 
+                arr = arr.unshift(new_array[0].to_i+39)
+                return konvert(arr)
+            end
         end
-      end
-      new_array[0]+new_array[1][1]+new_array[2][1]+new_array[3][1]
+        # p new_array
+        new_array[0]+new_array[1][1]+new_array[2][1]+new_array[3][1]
     end
-
   end
 end
+
+c = Enigma::Crack.new
+c.sort_messages(ARGV[0], ARGV[1])

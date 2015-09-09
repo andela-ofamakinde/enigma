@@ -3,7 +3,6 @@
        characters = ('a'..'z').to_a.concat(("0".."9").to_a).push(" ", ".", ",")
        rotated_characters = characters.rotate(rotation)
         Hash[characters.zip(rotated_characters)]
-    
      end
 
    def break_key(rotation, dated, stringed)

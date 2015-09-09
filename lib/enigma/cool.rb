@@ -83,8 +83,7 @@
      end
       
    def decrypt(string, enc_key, enc_date)
-     stringed = (string).downcase.split("").each_slice(4).to_a
-      
+     stringed = (string).downcase.split("").each_slice(4).to_a   
      result = stringed.collect do |arr|
        break_key(enc_key, enc_date, arr)
        results = @rotation_hash.collect do |letter, rotation|
@@ -101,16 +100,26 @@
 #   puts "This is enemy messgae-" +"#{enemy_message}"+"-"
 
 def sort_messages(encrypted_message, date)
-    encrypt_array = encrypted_message.split("").each_slice(4).to_a[-2]
+    arr = encrypted_message.downcase.split("").each_slice(4).to_a[-1]
+    p arr
+    p arr.length
     end_array = [".", ".", "e", "n", "d", ".", "."]
     extra_length = encrypted_message.split("").length - 7
     extra_length.times do 
         end_array.unshift("o")
     end
-    # puts "#{end_array
+    if arr.length == 4
+        encrypt_array = arr
+        decrypt_array = end_array.each_slice(4).to_a[-1]
+    else
+        encrypt_array = encrypted_message.split("").each_slice(4).to_a[-2]
+        decrypt_array = end_array.each_slice(4).to_a[-2]
+    end
+
+    # encrypt_array = encrypted_message.split("").each_slice(4).to_a[-2]
+    puts "#{end_array}"
     puts "#{encrypt_array}"
 
-    decrypt_array = end_array.each_slice(4).to_a[-2]
     
       puts "#{decrypt_array}"
     the_date = (date.to_i**2).to_s.split("").last(4).map(&:to_i)
