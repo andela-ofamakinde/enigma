@@ -12,9 +12,9 @@ module Enigma
     #   @cypher_array
     # end
 
-       def break_key(rotation, dated, stringed)
+    def break_key(rotation, date, text)
      @rotation = rotation.split("")
-     @new_date = (dated.to_i**2).to_s.split("").last(4)
+     @new_date = (date.to_i**2).to_s.split("").last(4)
      @cypher_array = []
      i = 0
      while i < 4
@@ -22,7 +22,7 @@ module Enigma
        i+=1
      end
      @cypher_array 
-     rotation_hash = Hash[@cypher_array.zip(stringed)]
+     rotation_hash = Hash[@cypher_array.zip(text)]
      rotation_hash
    end
   end

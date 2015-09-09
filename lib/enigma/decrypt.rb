@@ -7,8 +7,9 @@ module Enigma
     # def decrypt_letter(letter, cipher_for_rotation)
     #   cipher_for_rotation.key(letter)
     # end
-         def decrypt_letter(letter, rotated)
-       cipher_for_rotation = cipher(rotated)    
+      def decrypt_letter(letter, rotated)
+        new_cipher = Cipher.new
+       cipher_for_rotation = new_cipher.cipher(rotated)    
        cipher_for_rotation.key(letter)
      end
 
@@ -37,13 +38,12 @@ module Enigma
       new_key = Rotation.new
      result = stringed.collect do |arr|
        rotation_hash = new_key.break_key(enc_key, enc_date, arr)
-       p rotation_hash
        results = rotation_hash.collect do |letter, rotation|
          encrypted_letter = decrypt_letter(rotation, letter)
        end
        results.join
      end
-     result.join
+     p result.join
    end
 
     # def cipher(rotation_array)
@@ -54,6 +54,11 @@ module Enigma
     #   end
     #   cipher_array
     # end
-
   end
 end
+
+str = ARGV[0] || str
+enc_key = ARGV[0] || enc_key
+enc_date = ARGV[0] || enc_date
+d = Enigma::Decryptor.new
+d.decrypt(str, enc_key, enc_date) if enc_date

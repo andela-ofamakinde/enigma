@@ -110,4 +110,6 @@ module Enigma
 end
 
 c = Enigma::Crack.new
-c.sort_messages(ARGV[0], ARGV[1])
+ text = ARGV[0] || text
+ offset = ARGV[1] || offset
+c.sort_messages(text, offset) if text && offset
