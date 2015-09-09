@@ -5,8 +5,8 @@ module Enigma
 
     def encrypt_file(input_file, output_file)
       message = File.open(input_file, "r")
-      encrypt_text = Encryptor.new
-      puts encrypt_secret = encrypt_text.encrypt(message.read)
+      encryptor = Encryptor.new
+      encrypt_secret = encryptor.encrypt(message.read)
       encrypted_message = File.open(output_file, "w")
       encrypted_message.write(encrypt_secret[:text])
       encrypted_message.close

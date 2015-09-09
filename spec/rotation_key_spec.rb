@@ -5,9 +5,9 @@ module Enigma
   describe "Rotation Key"  do
     it "should create a hash" do
 
-      rotated_key = Enigma::Rotation.new
+      rotator = Enigma::Rotation.new
 
-      encrypted_hash = rotated_key.break_key("50267", "090915", ["j", ".", ".", "e"])
+      encrypted_hash = rotator.construct_rotation_hash("50267", "090915", ["j", ".", ".", "e"])
 
       expect(encrypted_hash).to eq({57=>"j", 4=>".", 28=>".", 72=>"e"})
     end

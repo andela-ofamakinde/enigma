@@ -9,22 +9,22 @@ module Enigma
       cipher_for_rotation[letter]
     end
 
-    def encrypt(string)
+    def encrypt(input_string)
       rotation = rand(10000..99999).to_s
-      dated = Time.now.strftime("%d%m%y")
-      new_key = Rotation.new
-      stringed = (string).downcase.split("").each_slice(4).to_a   
-      result = stringed.collect do |arr|
-        rotation_hash = new_key.break_key(rotation, dated, arr)
+      todays_date = Time.now.strftime("%d%m%y")
+      rotator = Rotation.new
+      grouped_input_string = (input_string).downcase.split("").each_slice(4).to_a   
+      result = grouped_input_string.collect do |arr|
+        rotation_hash = rotator.construct_rotation_hash(rotation, todays_date, arr)
         results = rotation_hash.collect do |letter, rotation|
           encrypted_letter = encrypt_letter(rotation, letter)
          end
         results.join
        end
-       message = {
+       {
         text: result.join,
         key: rotation,
-        date: dated
+        date: todays_date
        }
     end
 

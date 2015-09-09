@@ -1,6 +1,6 @@
 module Enigma
   class Rotation 
-    def break_key(rotation, date, text)
+    def construct_rotation_hash(rotation, date, text)
      @rotation = rotation.split("")
      @new_date = (date.to_i**2).to_s.split("").last(4)
      @cypher_array = []

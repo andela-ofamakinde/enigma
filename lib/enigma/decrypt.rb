@@ -10,13 +10,13 @@ module Enigma
       cipher_for_rotation.key(letter)
      end
 
-    def decrypt(string, enc_key, enc_date)
-      stringed = (string).downcase.split("").each_slice(4).to_a
-      new_key = Rotation.new
-      result = stringed.collect do |arr|
-       rotation_hash = new_key.break_key(enc_key, enc_date, arr)
-       results = rotation_hash.collect do |letter, rotation|
-         encrypted_letter = decrypt_letter(rotation, letter)
+    def decrypt(input_string, enc_key, enc_date)
+      grouped_input_array = (input_string).downcase.split("").each_slice(4).to_a
+      rotator = Rotation.new
+      result = grouped_input_array.collect do |arr|
+        rotation_hash = rotator.construct_rotation_hash(enc_key, enc_date, arr)
+        results = rotation_hash.collect do |letter, rotation|
+          encrypted_letter = decrypt_letter(rotation, letter)
        end
        results.join
       end
